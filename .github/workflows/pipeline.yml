@@ -22,6 +22,7 @@ jobs:
         java-version: 11
     - name: Build Snapshot
       run: |
+        cd initial
         export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain test --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --query authorizationToken --output text`
         bash ./initial/gradlew -Pbuild_target=SNAPSHOT build publish
         ls -lsh initial/
