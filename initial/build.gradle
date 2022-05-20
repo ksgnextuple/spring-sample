@@ -113,8 +113,6 @@ dependencies {
 	testImplementation 'org.mockito:mockito-inline:2.13.0'
 
 	testImplementation "com.github.javafaker:javafaker:0.15"
-
-	implementation "com.example:rest-service:1.6.1-SNAPSHOT"
 }
 
 jacocoTestReport {
