@@ -59,7 +59,7 @@ apply plugin: "org.sonatype.gradle.plugins.scan"
 apply plugin: "base"
 
 group = 'com.example'
-version = "1.6.2-${build_target}"
+version = "1.6.3-${build_target}"
 
 sourceCompatibility = "${sourceJdkVersion}"
 targetCompatibility = "${targetJdkVersion}"

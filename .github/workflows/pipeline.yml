@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  build:
+  Build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -25,5 +25,10 @@ jobs:
         cd initial
         export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain test --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --query authorizationToken --output text`
         bash ./gradlew -Pbuild_target=SNAPSHOT clean build publish
-        ls -lsh initial/
+        ls
+    - name: Docker Build
+      run: |
+        cd initial
+        export VERSION=`bash ./gradlew -Pbuild_target=SNAPSHOT -q properties | grep version | sed -e "s@version: @@g"`
+      
 
