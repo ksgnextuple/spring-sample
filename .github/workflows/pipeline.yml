@@ -29,13 +29,15 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
     - name: Docker Build & Push
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       run: |
         cd initial
         export SERVICE_NAME=`echo "${{ github.repository }}" | awk -F "/" '{print $2}'`
         export VERSION=`bash ./gradlew -Pbuild_target=SNAPSHOT -q properties | grep version | sed -e "s@version: @@g"`
         export SERVICE_CODE=`echo "$VERSION" | cut -d '-' -f1`
-        docker build -t ${{ secrets.ECR_REGISTRY }}/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }} .
-        docker push ${{ secrets.ECR_REGISTRY }}/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }}
+        docker build -t $ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }} .
+        docker push $ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }}
         
         
 
