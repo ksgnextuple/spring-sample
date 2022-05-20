@@ -55,6 +55,7 @@ apply plugin: 'org.owasp.dependencycheck'
 apply plugin: "com.github.spotbugs"
 apply plugin: "com.diffplug.spotless"
 apply plugin: "org.sonatype.gradle.plugins.scan"
+apply plugin: "base"
 
 group = 'com.example'
 version = "1.6.2-${build_target}"
