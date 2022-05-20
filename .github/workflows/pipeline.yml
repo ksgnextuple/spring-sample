@@ -14,8 +14,6 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: 11
-        cache: 'gradle'
-        distribution:
     - name: Build Snapshot
       run: bash ./initial/gradlew -Pbuild_target=SNAPSHOT clean build
 
