@@ -24,11 +24,17 @@ jobs:
       run: |
         cd initial
         export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain test --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --query authorizationToken --output text`
-        bash ./gradlew -Pbuild_target=SNAPSHOT clean build publish
-        ls
-    - name: Docker Build
+        bash ./gradlew -Pbuild_target=SNAPSHOT clean build
+    - name: Login to ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: Docker Build & Push
       run: |
         cd initial
+        export SERVICE_NAME=`echo "${{ github.repository }}" | awk -F "/" '{print $2}'`
         export VERSION=`bash ./gradlew -Pbuild_target=SNAPSHOT -q properties | grep version | sed -e "s@version: @@g"`
-      
+        docker build -t ${{ secrets.ECR_REGISTRY }}/$SERVICE_NAME:$VERSION.{{ github.sha }} .
+        docker push ${{ secrets.ECR_REGISTRY }}/$SERVICE_NAME:$VERSION.{{ github.sha }}
+        
+        
 
