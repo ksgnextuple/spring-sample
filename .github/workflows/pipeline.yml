@@ -23,7 +23,6 @@ jobs:
     - name: Build Snapshot
       run: |
         export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain test --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --query authorizationToken --output text`
-        bash ./initial/gradlew -Pbuild_target=SNAPSHOT build
-        ls
-        ls -lsh ./initial/build/libs/
+        bash ./initial/gradlew -Pbuild_target=SNAPSHOT build publish
+        ls -lsh initial/
 
