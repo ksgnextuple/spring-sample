@@ -37,7 +37,7 @@ jobs:
         export VERSION=`bash ./gradlew -Pbuild_target=SNAPSHOT -q properties | grep version | sed -e "s@version: @@g"`
         export SERVICE_CODE=`echo "$VERSION" | cut -d '-' -f1`
         export IMAGE_NAME=`$ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }}`
-        docker build -t "$IMAGE_NAME" .
+        docker build -t $ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }} .
         sed -e "s@<IMAGE_NAME>@$IMAGE_NAME@g" ./manifests/deployment.yaml
 #        docker push $ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }}
         
