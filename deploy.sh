@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo ${{ ECR_REGISTRY }}
+
+
 aws sts get-caller-identity
 aws eks update-kubeconfig --name eksdemo1 --region us-east-1
 
@@ -17,5 +20,6 @@ fi
 
 echo "Currently running deployment color : $SERVICE_ACTIVE_COLOR"
 
-kubectl apply -f ./manifests/deployment.yaml
-kubectl apply -f ./manifests/service.yaml
+
+#kubectl apply -f ./manifests/deployment.yaml
+#kubectl apply -f ./manifests/service.yaml

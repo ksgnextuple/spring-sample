@@ -38,7 +38,6 @@ jobs:
         export SERVICE_CODE=`echo "$VERSION" | cut -d '-' -f1`
         export IMAGE_NAME="$ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }}"
         docker build -t $ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }} .
-        sed -e "s@<IMAGE_NAME>@$IMAGE_NAME@g" ../manifests/deployment.yaml
 #        docker push $ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }}
         
   DeployToDev:
