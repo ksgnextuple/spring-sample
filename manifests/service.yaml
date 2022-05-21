@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: rest-uservice
+  namespace: dev
   labels:
     uservice: rest-uservice
 spec:
