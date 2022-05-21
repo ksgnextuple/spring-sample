@@ -1,22 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: <SERVICE_NAME>
-  namespace: <ENVIRONMENT>
+  name: rest-uservice
 spec:
   selector:
     matchLabels:
-      uservice: <SERVICE_NAME>
-  replicas: <REPLICAS>
+      uservice: rest-uservice
+  replicas: 1
   revisionHistoryLimit: 1
   template:
     metadata:
       labels:
-        uservice: <SERVICE_NAME>
+        uservice: rest-uservice
       spec:
       containers:
-        - name: <SERVICE_NAME>
-          image: "<IMAGE_NAME>"
+        - name: rest-uservice
+          image:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

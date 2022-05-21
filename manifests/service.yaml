@@ -1,15 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: <SERVICE_NAME>
-  namespace: <ENVIRONMENT>
+  name: rest-uservice
   labels:
-    uservice: <SERVICE_NAME>
-    version: "<SERVICE_VERSION>"
+    uservice: rest-uservice
 spec:
   ports:
     - name: http
       port: 8080
   selector:
-    uservice: <SERVICE_NAME>
-    version: "<SERVICE_VERSION>"
+    uservice: rest-uservice
