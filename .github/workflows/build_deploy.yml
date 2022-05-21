@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: CI
 
 on:
   push:
@@ -45,6 +45,9 @@ jobs:
     environment: dev
     steps:
       - uses: actions/checkout@v3
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
       - uses: azure/aks-set-context@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -58,7 +61,7 @@ jobs:
             ${{ github.workspace }}/manifests/service.yaml
           strategy: canary
           images: |
-
+            ${{ steps.login-ecr.outputs.registry }}/spring-sample:1.6.3.78a993fefe4c49d2db4cd7217c71bc3f598e5cee
           action: deploy
 
 
