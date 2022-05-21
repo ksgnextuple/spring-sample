@@ -36,7 +36,9 @@ jobs:
         export SERVICE_NAME=`echo "${{ github.repository }}" | awk -F "/" '{print $2}'`
         export VERSION=`bash ./gradlew -Pbuild_target=SNAPSHOT -q properties | grep version | sed -e "s@version: @@g"`
         export SERVICE_CODE=`echo "$VERSION" | cut -d '-' -f1`
-        docker build -t $ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }} .
+        export IMAGE_NAME=`$ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }}`
+        docker build -t $IMAGE_NAME .
+        sed -e "s@<IMAGE_NAME>@$IMAGE_NAME@g" ./manifests/deployment.yaml
 #        docker push $ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }}
         
   DeployToDev:
@@ -53,22 +55,9 @@ jobs:
       - name: Login to ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - uses: azure/aks-set-context@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          cluster-name: ${{ secrets.CLUSTER_NAME }}
-          resource-group: ${{ secrets.CLUSTER_RESOURCE_GROUP }}
-      - uses: azure/k8s-deploy@v1.4
-        with:
-          namespace: dev
-          manifests: |
-            ${{ github.workspace }}/manifests/deployment.yaml
-            ${{ github.workspace }}/manifests/service.yaml
-          strategy: canary
-          images: |
-            ${{ steps.login-ecr.outputs.registry }}/spring-sample:1.6.3.78a993fefe4c49d2db4cd7217c71bc3f598e5cee
-          action: deploy
-
+      - name: Check AWS Account
+        run: |
+          aws sts get-caller-identity
 
 
 
