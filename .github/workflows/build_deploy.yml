@@ -46,7 +46,6 @@ jobs:
     environment: dev
     steps:
       - uses: actions/checkout@v3
-        id: install
       - uses: azure/setup-kubectl@v2.0
       - uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -55,6 +54,9 @@ jobs:
           aws-region: us-east-1
       - name: Deploy to EKS
         run: ./deploy.sh
+        env:
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          COMMIT_HASH: ${{ github.sha }}
 
 
 
