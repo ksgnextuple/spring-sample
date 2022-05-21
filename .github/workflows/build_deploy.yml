@@ -47,7 +47,8 @@ jobs:
     environment: dev
     steps:
       - uses: actions/checkout@v3
-      - uses: tale/kubectl-action@v1
+        id: install
+      - uses: azure/setup-kubectl@v2.0
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
