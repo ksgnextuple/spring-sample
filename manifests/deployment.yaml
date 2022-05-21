@@ -12,10 +12,10 @@ spec:
     metadata:
       labels:
         uservice: rest-uservice
-      spec:
+    spec:
       containers:
         - name: rest-uservice
-          image:
+          image: "<IMAGE_NAME>"
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -48,4 +48,3 @@ spec:
               port: 8080
             failureThreshold: 60
             periodSeconds: 10
-

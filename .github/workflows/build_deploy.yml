@@ -57,6 +57,8 @@ jobs:
             ${{ github.workspace }}/manifests/deployment.yaml
             ${{ github.workspace }}/manifests/service.yaml
           strategy: canary
+          images: |
+
           action: deploy
 
 
