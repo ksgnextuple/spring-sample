@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rest-uservice
-  namespace: dev
+  name: <SERVICE_NAME>
+  namespace: <ENVIRONMENT>
 spec:
   selector:
     matchLabels:
-      uservice: rest-uservice
-  replicas: 1
+      uservice: <SERVICE_NAME>
+  replicas: <REPLICAS>
   revisionHistoryLimit: 1
   template:
     metadata:
       labels:
-        uservice: rest-uservice
+        uservice: <SERVICE_NAME>
     spec:
       containers:
-        - name: rest-uservice
+        - name: <SERVICE_NAME>
           image: "<IMAGE_NAME>"
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
           resources:
             requests:
-              memory: "500Mi"
-              cpu: "256m"
+              memory: "<MIN_MEM>"
+              cpu: "<MIN_CPU>"
             limits:
-              memory: "500Mi"
-              cpu: "256m"
+              memory: "<MAX_MEM>"
+              cpu: "<MAX_CPU>"
           readinessProbe:
             httpGet:
               path: "/actuator/health"
