@@ -57,7 +57,7 @@ jobs:
       - name: Clone Common Repo
         run: |
           eval `ssh-agent -s`
-          echo "{{ secrets.SSH_KEY }}" | ssh-add -
+          ssh-add - <<< "${{ secrets.SSH_KEY }}"
           git@github.com:ksgnextuple/common-deploy-scripts.git
       - name: Deploy to EKS
         run: ./deploy.sh
