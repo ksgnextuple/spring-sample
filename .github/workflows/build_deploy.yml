@@ -58,7 +58,7 @@ jobs:
         run: |
           eval `ssh-agent -s`
           ssh-add - <<< "${{ secrets.SSH_KEY }}"
-          git@github.com:ksgnextuple/common-deploy-scripts.git
+          git clone git@github.com:ksgnextuple/common-deploy-scripts.git
       - name: Deploy to EKS
         run: ./deploy.sh
         env:
