@@ -27,7 +27,13 @@ fi
 
 echo "Currently running deployment color : $SERVICE_ACTIVE_COLOR"
 
-yq --version
+export REPLICAS=`yq -e eval ".server.environments.$ENVIRONMENT.replicas"`
+export MIN_MEM_REQUIRED=`yq -e eval ".server.environments.$ENVIRONMENT.resources.min.memory"`
+export MAX_MEM_REQUIRED=`yq -e eval ".server.environments.$ENVIRONMENT.resources.max.memory"`
+export MIN_CPU_REQUIRED=`yq -e eval ".server.environments.$ENVIRONMENT.resources.min.cpu"`
+export MAX_CPU_REQUIRED=`yq -e eval ".server.environments.$ENVIRONMENT.resources.max.cpu"`
+
+echo "$MAX_CPU_REQUIRED"
 
 #kubectl apply -f ./manifests/deployment.yaml
 #kubectl apply -f ./manifests/service.yaml
