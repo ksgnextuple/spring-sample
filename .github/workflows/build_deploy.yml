@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ development ]
   workflow_dispatch:
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
         docker build -t $ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }} .
 #        docker push $ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }}
         
-  DeployToDev:
+  Deploy-To-Dev:
     runs-on: ubuntu-latest
     needs: Build
     concurrency: deploy
