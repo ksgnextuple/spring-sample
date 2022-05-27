@@ -3,7 +3,7 @@ name: PR-BUILD
 on:
   workflow_call:
   pull_request:
-    branches: [ master ]
+    branches: [ development ]
 
 jobs:
   PR-CHECK:
@@ -17,5 +17,5 @@ jobs:
       run: |
         cd initial
         bash ./gradlew -Pbuild_target=SNAPSHOT clean build jacocoTestReport spotlessApply spotbugsMain
-        bash ./gradlew -Pbuild_target=SNAPSHOT dependencyCheckAggregate --info
+#        bash ./gradlew -Pbuild_target=SNAPSHOT dependencyCheckAggregate --info
         bash ./gradlew -Pbuild_target=SNAPSHOT sonarqube showSonarQubeLink --info
