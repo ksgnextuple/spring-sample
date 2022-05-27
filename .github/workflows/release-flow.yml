@@ -1,22 +1,24 @@
-name: RELEASE
+name: PROD RELEASE
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - '*RELEASE'
 jobs:
-  release-on-push:
+  Production-Release:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
-      - name:
-        run: |
-          cd initial
-          export VERSION=`bash ./gradlew -Pbuild_target=SNAPSHOT -q properties | grep version | sed -e "s@version: @@g"`
-      - uses: rymndhng/release-on-push-action@master
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Create Release
+        uses: actions/create-release@v1
         with:
-          tag_prefix: "v"
-          release_name: ${VERSION}-RELEASE
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
 
+  Deploy-To-Prod:
+    runs-on: ubuntu-latest
+    needs: Production-Release
+    environment: prod
