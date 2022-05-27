@@ -16,7 +16,6 @@ jobs:
     - name: PR-BUILD
       run: |
         cd initial
-        export CHANGE_BRANCH=`echo ${GITHUB_REF##*/}`
+        echo "${{ github.head_ref }}"
         export CHANGE_ID=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-        bash ./gradlew sonarqube -Dsonar.pullrequest.branch=${CHANGE_BRANCH} -Dsonar.pullrequest.base=development -Dsonar.pullrequest.key=${CHANGE_ID} showSonarQubeLink --info
         bash ./gradlew -Pbuild_target=SNAPSHOT clean build jacocoTestReport spotlessApply spotbugsMain
