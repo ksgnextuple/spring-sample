@@ -11,6 +11,12 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
+      - name:
+        run: |
+          cd initial
+          export VERSION=`bash ./gradlew -Pbuild_target=SNAPSHOT -q properties | grep version | sed -e "s@version: @@g"`
       - uses: rymndhng/release-on-push-action@master
         with:
-          bump_version_scheme: norelease
+          tag_prefix: "v"
+          release_name: ${VERSION}-RELEASE
+
