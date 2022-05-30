@@ -12,6 +12,7 @@ jobs:
 
   Build-Deploy:
     uses: ./.github/workflows/build&deploy.yml
+    secrets: inherit
 
 
 

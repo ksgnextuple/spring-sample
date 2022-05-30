@@ -3,11 +3,11 @@ name: reusable-workflow
 on:
   workflow_call:
 
+
 jobs:
 
   Build:
     runs-on: ubuntu-latest
-    secrets: inherit
     steps:
       - uses: actions/checkout@v3
       - uses: aws-actions/setup-sam@v1
