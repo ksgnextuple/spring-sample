@@ -28,6 +28,11 @@ jobs:
         export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain test --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --query authorizationToken --output text`
         bash ./gradlew -Pbuild_target=SNAPSHOT clean build jacocoTestReport spotlessApply spotbugsMain
         bash ./gradlew -Pbuild_target=SNAPSHOT sonarqube showSonarQubeLink --info
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: "initial/**/test-results/**/*.xml"
     - name: Login to ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
