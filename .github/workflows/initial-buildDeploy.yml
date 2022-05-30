@@ -12,6 +12,8 @@ jobs:
 
   Build-Deploy:
     uses: ./.github/workflows/build&deploy.yml
+    with:
+      module: initial
     secrets: inherit
 
 
