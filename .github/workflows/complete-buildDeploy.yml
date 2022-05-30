@@ -1,0 +1,21 @@
+name: SERVICE-B BUILD-DEPLOY
+
+on:
+  push:
+    branches: [ development ]
+    paths:
+      - "complete/**"
+      - ".github/workflows/complete-buildDeploy.yml"
+  workflow_dispatch:
+
+jobs:
+
+  Build-Deploy:
+    uses: ./.github/workflows/build&deploy.yml
+    with:
+      module: complete
+    secrets: inherit
+
+
+
+
