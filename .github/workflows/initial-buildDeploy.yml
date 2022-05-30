@@ -5,7 +5,7 @@ on:
     branches: [ development ]
     paths:
       - "initial/**"
-      - ".github/workflows/intitial-buildDeploy.yml"
+      - ".github/workflows/initial-buildDeploy.yml"
   workflow_dispatch:
 
 jobs:
