@@ -12,15 +12,29 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: aws-actions/setup-sam@v1
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: "initial/**/test-results/**/*.xml"
     - uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
+    - name: Login to ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - uses: dorny/paths-filter@v2.2.1
+      id: filter
+      with:
+        filters: |
+          initial:
+            - 'initial/**'
     - uses: actions/setup-java@v1
       with:
         java-version: 11
-    - name: Build and Analyze
+    - name: Build and Analyze - Intial
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
@@ -28,14 +42,7 @@ jobs:
         export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain test --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --query authorizationToken --output text`
         bash ./gradlew -Pbuild_target=SNAPSHOT clean build jacocoTestReport spotlessApply spotbugsMain
         bash ./gradlew -Pbuild_target=SNAPSHOT sonarqube showSonarQubeLink --info
-    - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v1
-      if: always()
-      with:
-        files: "initial/**/test-results/**/*.xml"
-    - name: Login to ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+      if: ${{ steps.filter.outputs.initial == 'true' }}
     - name: Docker Build & Push
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -47,6 +54,7 @@ jobs:
         export IMAGE_NAME="$ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }}"
         docker build -t $ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }} .
 #        docker push $ECR_REGISTRY/$SERVICE_NAME:$SERVICE_CODE.${{ github.sha }}
+      if: ${{ steps.filter.outputs.initial == 'true' }}
         
   Deploy-To-Dev:
     runs-on: ubuntu-latest
