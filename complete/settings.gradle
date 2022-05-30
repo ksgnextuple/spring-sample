@@ -1,1 +1,6 @@
-rootProject.name = 'rest-service'
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+rootProject.name = 'complete-uservice'
