@@ -154,7 +154,7 @@ publishing {
 	}
 	repositories {
 		maven {
-			url 'https://test-137546367210.d.codeartifact.us-east-1.amazonaws.com/maven/spring-services/'
+			url 'https://nextuple-907594312923.d.codeartifact.us-east-1.amazonaws.com/maven/spring-sample/'
 			credentials {
 				username "aws"
 				password System.env.CODEARTIFACT_AUTH_TOKEN
