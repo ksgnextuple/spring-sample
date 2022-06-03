@@ -19,8 +19,8 @@ jobs:
       - uses: aws-actions/setup-sam@v1
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::577507683874:role/github-action-role
-          role-session-name: git-actions-pipeline-2
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: actionsPipeline
           aws-region: us-east-1
       - name: Login to ECR
         id: login-ecr
@@ -35,11 +35,12 @@ jobs:
           cd ${{ inputs.module }}
           bash ./gradlew -Pbuild_target=SNAPSHOT clean build jacocoTestReport spotlessApply spotbugsMain
           bash ./gradlew -Pbuild_target=SNAPSHOT sonarqube showSonarQubeLink --info
-#      - name: Publish Test Results
-#        uses: EnricoMi/publish-unit-test-result-action@v1
-#        if: always()
-#        with:
-#          files: "**/**/test-results/**/*.xml"
+          export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain nextuple --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --query authorizationToken --output text`
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: "**/**/test-results/**/*.xml"
       - name: Docker Build & Push
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -67,7 +68,7 @@ jobs:
       - uses: mikefarah/yq@master
       - uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::577507683874:role/github-action-role
+          role-to-assume: ${{ secrets.AWS_ROLE }}
           role-session-name: git-actions-pipeline
           aws-region: us-east-1
       - name: Clone Common Repo
