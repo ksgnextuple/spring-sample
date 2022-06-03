@@ -34,7 +34,7 @@ jobs:
         run: |
           cd ${{ inputs.module }}
           export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain nextuple --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --query authorizationToken --output text`
-          bash ./gradlew -Pbuild_target=SNAPSHOT clean build jacocoTestReport spotlessApply spotbugsMain
+          bash ./gradlew -Pbuild_target=SNAPSHOT clean build jacocoTestReport spotlessApply spotbugsMain publish
           bash ./gradlew -Pbuild_target=SNAPSHOT sonarqube showSonarQubeLink --info
 #      - name: Publish Test Results
 #        uses: EnricoMi/publish-unit-test-result-action@v1
@@ -51,7 +51,7 @@ jobs:
           export SERVICE_CODE=`echo "$VERSION" | cut -d '-' -f1`
           export IMAGE_NAME="$ECR_REGISTRY/$SERVICE_NAME-${{ inputs.module }}:$SERVICE_CODE.${{ github.sha }}"
           docker build -t $ECR_REGISTRY/$SERVICE_NAME-${{ inputs.module }}:$SERVICE_CODE.${{ github.sha }} .
-          docker push $ECR_REGISTRY/$SERVICE_NAME-${{ inputs.module }}:$SERVICE_CODE.${{ github.sha }}
+#          docker push $ECR_REGISTRY/$SERVICE_NAME-${{ inputs.module }}:$SERVICE_CODE.${{ github.sha }}
 
   Deploy-To-Dev:
     runs-on: ubuntu-latest
