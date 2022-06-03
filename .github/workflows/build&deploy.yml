@@ -10,11 +10,10 @@ jobs:
 
   Build:
     runs-on: ubuntu-latest
-#    permissions:
-#
-#      id-token: write
-#      contents: write
-#      packages: write
+    permissions:
+      id-token: write
+      contents: write
+      packages: write
     steps:
       - uses: actions/checkout@v3
       - uses: aws-actions/setup-sam@v1
@@ -42,17 +41,17 @@ jobs:
         if: always()
         with:
           files: "**/**/test-results/**/*.xml"
-#      - name: Docker Build & Push
-#        env:
-#          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-#        run: |
-#          cd ${{ inputs.module }}
-#          export SERVICE_NAME=`echo "${{ github.repository }}" | awk -F "/" '{print $2}'`
-#          export VERSION=`bash ./gradlew -Pbuild_target=SNAPSHOT -q properties | grep version | sed -e "s@version: @@g"`
-#          export SERVICE_CODE=`echo "$VERSION" | cut -d '-' -f1`
-#          export IMAGE_NAME="$ECR_REGISTRY/$SERVICE_NAME-${{ inputs.module }}:$SERVICE_CODE.${{ github.sha }}"
-#          docker build -t $ECR_REGISTRY/$SERVICE_NAME-${{ inputs.module }}:$SERVICE_CODE.${{ github.sha }} .
-#          docker push $ECR_REGISTRY/$SERVICE_NAME-${{ inputs.module }}:$SERVICE_CODE.${{ github.sha }}
+      - name: Docker Build & Push
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          cd ${{ inputs.module }}
+          export SERVICE_NAME=`echo "${{ github.repository }}" | awk -F "/" '{print $2}'`
+          export VERSION=`bash ./gradlew -Pbuild_target=SNAPSHOT -q properties | grep version | sed -e "s@version: @@g"`
+          export SERVICE_CODE=`echo "$VERSION" | cut -d '-' -f1`
+          export IMAGE_NAME="$ECR_REGISTRY/$SERVICE_NAME-${{ inputs.module }}:$SERVICE_CODE.${{ github.sha }}"
+          docker build -t $ECR_REGISTRY/$SERVICE_NAME-${{ inputs.module }}:$SERVICE_CODE.${{ github.sha }} .
+          docker push $ECR_REGISTRY/$SERVICE_NAME-${{ inputs.module }}:$SERVICE_CODE.${{ github.sha }}
 
   Deploy-To-Dev:
     runs-on: ubuntu-latest
