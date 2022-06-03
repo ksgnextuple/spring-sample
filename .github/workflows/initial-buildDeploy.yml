@@ -6,12 +6,6 @@ on:
     paths:
       - "initial/**"
       - ".github/workflows/initial-buildDeploy.yml"
-  workflow_dispatch:
-    inputs:
-      service:
-        description: Enter root directory
-        type: string
-        required: true
 
 jobs:
 
