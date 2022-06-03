@@ -26,7 +26,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          cd ${{ inputs.module }}
+          cd initial
           bash ./gradlew -Pbuild_target=SNAPSHOT clean build jacocoTestReport spotlessApply spotbugsMain
           bash ./gradlew -Pbuild_target=SNAPSHOT sonarqube showSonarQubeLink --info
       - name: Publish Test Results
