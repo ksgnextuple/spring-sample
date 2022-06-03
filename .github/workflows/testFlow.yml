@@ -1,11 +1,9 @@
 name: reusable-workflow
 
 on:
-  workflow_call:
-    inputs:
-      module:
-        required: true
-        type: string
+  push:
+    branches:
+      - development
 jobs:
 
   Build:
