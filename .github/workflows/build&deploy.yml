@@ -1,6 +1,7 @@
 name: reusable-workflow
 
 on:
+  workflow_dispatch:
   workflow_call:
     inputs:
       module:
@@ -12,8 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: write
-      packages: write
+      issues: read
+      checks: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
       - uses: aws-actions/setup-sam@v1
@@ -57,8 +59,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: write
-      packages: write
+      issues: read
+      checks: write
+      pull-requests: write
     needs: Build
     concurrency: deploy
     environment: dev
