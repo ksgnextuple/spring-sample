@@ -40,9 +40,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           cd ${{ inputs.module }}
+          export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain nextuple --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --query authorizationToken --output text`
           bash ./gradlew -Pbuild_target=SNAPSHOT clean build jacocoTestReport spotlessApply spotbugsMain publish
           bash ./gradlew -Pbuild_target=SNAPSHOT sonarqube showSonarQubeLink --info
-          export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain nextuple --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --query authorizationToken --output text`
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
