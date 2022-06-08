@@ -10,7 +10,7 @@ on:
 jobs:
 
   Build-Deploy:
-    uses: ./.github/workflows/build&deploy.yml
+    uses: ksgnextuple/common-deploy-scripts/.github/workflows/build&deploy.yml@master
     with:
       module: initial
     secrets: inherit
